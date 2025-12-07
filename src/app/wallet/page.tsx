@@ -1,7 +1,7 @@
 // src/app/wallet/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useApp } from "@/provider/AppContext";
 import {
   Wallet as WalletIcon,
@@ -42,6 +42,18 @@ export default function Wallet() {
 
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState("");
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showWithdrawModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showWithdrawModal]);
 
   const walletData: WalletData = {
     availableBalance: 125450,
@@ -377,11 +389,11 @@ export default function Wallet() {
         </div>
       </div>
 
-      {/* Withdrawal Modal */}
+      {/* Withdrawal Modal - FIXED FOR MOBILE */}
       {showWithdrawModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl">
-            <div className="p-8 border-b border-slate-200">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl my-8 max-h-screen overflow-y-auto">
+            <div className="p-8 border-b border-slate-200 sticky top-0 bg-white z-10">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-3xl font-bold text-slate-900">
                   Withdraw Funds
@@ -420,7 +432,9 @@ export default function Wallet() {
                     <p className="text-xl font-bold text-slate-900">
                       GTBank ••••1234
                     </p>
-                    <p className="text-slate-600">Account Name: John Doe</p>
+                    <p className="text-slate-600">
+                      Account Name: {vendorProfile.name || "John Doe"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -445,29 +459,34 @@ export default function Wallet() {
                 </p>
               </div>
 
-              {/* Quick Amount Buttons */}
-              <div className="grid grid-cols-4 gap-4">
-                {[25, 50, 75, 100].map((percent) => {
-                  const amount = Math.floor(
-                    (walletData.availableBalance * percent) / 100
-                  );
-                  return (
-                    <button
-                      key={percent}
-                      type="button"
-                      onClick={() => setWithdrawAmount(amount.toString())}
-                      className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 py-4 rounded-xl font-bold text-lg transition-all shadow-md hover:shadow-lg"
-                    >
-                      {percent}%
-                    </button>
-                  );
-                })}
+              {/* Quick Amount Buttons - NOW VISIBLE ON MOBILE */}
+              <div>
+                <p className="text-lg font-medium text-slate-700 mb-4">
+                  Quick Select Amount
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {[25, 50, 75, 100].map((percent) => {
+                    const amount = Math.floor(
+                      (walletData.availableBalance * percent) / 100
+                    );
+                    return (
+                      <button
+                        key={percent}
+                        type="button"
+                        onClick={() => setWithdrawAmount(amount.toString())}
+                        className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 py-5 rounded-xl font-bold text-lg transition-all shadow-md hover:shadow-lg"
+                      >
+                        {percent}%
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Info */}
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 p-6 rounded-2xl">
                 <p className="text-blue-800 flex items-start gap-3">
-                  <AlertCircle size={20} className="mt-0.5" />
+                  <AlertCircle size={20} className="mt-0.5 flex-shrink-0" />
                   <span>
                     Withdrawals are processed within <strong>24 hours</strong>{" "}
                     during business days. You’ll receive a notification when the
@@ -476,8 +495,8 @@ export default function Wallet() {
                 </p>
               </div>
 
-              {/* Buttons */}
-              <div className="flex gap-6 pt-6">
+              {/* Buttons - STICKY ON MOBILE */}
+              <div className="flex gap-6 pt-6 pb-8 sticky bottom-0 bg-white border-t border-slate-200 -mx-8 px-8">
                 <button
                   type="button"
                   onClick={() => {

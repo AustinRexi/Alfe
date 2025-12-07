@@ -70,15 +70,15 @@ export default function Profile() {
   const { vendorProfile, setVendorProfile, currentPage } = useApp();
 
   const [formData, setFormData] = useState({
-    name: vendorProfile.name,
-    email: vendorProfile.email,
-    phone: vendorProfile.phone,
-    nin: vendorProfile.nin,
-    sex: vendorProfile.sex,
-    state: vendorProfile.state,
-    businessAddress: vendorProfile.businessAddress,
-    residentialAddress: vendorProfile.residentialAddress,
-    category: vendorProfile.category,
+    name: vendorProfile.name || "",
+    email: vendorProfile.email || "",
+    phone: vendorProfile.phone || "",
+    nin: vendorProfile.nin || "",
+    sex: vendorProfile.sex || "",
+    state: vendorProfile.state || "",
+    businessAddress: vendorProfile.businessAddress || "",
+    residentialAddress: vendorProfile.residentialAddress || "",
+    category: vendorProfile.category || "",
     profileImage: vendorProfile.profileImage || "",
   });
 
@@ -88,18 +88,18 @@ export default function Profile() {
 
   const forceComplete = !vendorProfile.isComplete && currentPage === "profile";
 
-  // Keep form in sync if profile changes elsewhere
+  // Keep form in sync with context (important for refresh)
   useEffect(() => {
     setFormData({
-      name: vendorProfile.name,
-      email: vendorProfile.email,
-      phone: vendorProfile.phone,
-      nin: vendorProfile.nin,
-      sex: vendorProfile.sex,
-      state: vendorProfile.state,
-      businessAddress: vendorProfile.businessAddress,
-      residentialAddress: vendorProfile.residentialAddress,
-      category: vendorProfile.category,
+      name: vendorProfile.name || "",
+      email: vendorProfile.email || "",
+      phone: vendorProfile.phone || "",
+      nin: vendorProfile.nin || "",
+      sex: vendorProfile.sex || "",
+      state: vendorProfile.state || "",
+      businessAddress: vendorProfile.businessAddress || "",
+      residentialAddress: vendorProfile.residentialAddress || "",
+      category: vendorProfile.category || "",
       profileImage: vendorProfile.profileImage || "",
     });
     setImagePreview(vendorProfile.profileImage || "");
@@ -143,11 +143,14 @@ export default function Profile() {
       ...vendorProfile,
       ...formData,
       isComplete: isFormComplete(),
-      isVerified: isFormComplete(), // In real app: admin approval
+      isVerified: isFormComplete(), // In real app: send to backend for approval
     };
 
+    // Save to context + localStorage (persists on refresh!)
     setVendorProfile(updatedProfile);
-    alert("Profile saved successfully!");
+    localStorage.setItem("vendorProfile", JSON.stringify(updatedProfile));
+
+    alert("Profile saved successfully! Your data is safe even if you refresh.");
   };
 
   return (
@@ -161,6 +164,18 @@ export default function Profile() {
             : "Manage your business information and verification status"}
         </p>
       </div>
+
+      {/* Success Banner */}
+      {vendorProfile.isComplete && (
+        <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-2xl p-6 shadow-lg flex items-center gap-5">
+          <CheckCircle size={48} className="text-emerald-600" />
+          <div>
+            <h3 className="text-xl font-bold text-emerald-900">
+              Profile Complete!
+            </h3>
+          </div>
+        </div>
+      )}
 
       {/* Verification Status Card */}
       <div
@@ -417,13 +432,14 @@ export default function Profile() {
           </div>
 
           {/* Submit */}
-          <div className="flex items-center justify-between pt-8 border-t border-slate-200">
-            <p className="text-sm text-slate-600">
-              All fields marked are required for verification
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-slate-200">
+            <p className="text-sm text-slate-600 text-center sm:text-left">
+              Your profile is saved automatically and will stay even after
+              refresh
             </p>
             <button
               type="submit"
-              className="bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 text-white px-8 py-5 rounded-xl font-semibold text-lg shadow-xl transition-all flex items-center gap-3 hover:shadow-2xl"
+              className="bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 text-white px-10 py-5 rounded-xl font-bold text-lg shadow-xl transition-all flex items-center gap-3 hover:shadow-2xl"
             >
               <Upload size={24} />
               {forceComplete

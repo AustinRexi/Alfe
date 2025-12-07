@@ -89,7 +89,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Load session on mount
   useEffect(() => {
     const session = localStorage.getItem("vendorSession");
-    const savedProfile = localStorage.getItem("vendorProfile");
+    const savedProfile = localStorage.getItem("vendorProfile"); // ← This loads it
+
     if (session) {
       setIsAuthenticated(true);
       if (savedProfile) {
@@ -105,7 +106,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("vendorSession");
-    localStorage.removeItem("vendorProfile");
+    localStorage.removeItem("vendorProfile"); // ← Only removed on logout
     setCurrentPage("dashboard");
   };
 
