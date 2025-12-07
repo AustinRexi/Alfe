@@ -35,6 +35,7 @@
 // }
 // app/layout.tsx
 import type { Metadata } from "next";
+
 import { AppProvider } from "@/provider/AppContext";
 import "./globals.css";
 

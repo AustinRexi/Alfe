@@ -13,7 +13,7 @@ interface NavbarProps {
   mobileMenuOpen: boolean;
 }
 
-export function Navbar({
+export default function Navbar({
   vendorName,
   vendorImage,
   notifications,

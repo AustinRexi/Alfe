@@ -30,7 +30,7 @@ const menuItems = [
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
 
-export function Sidebar({
+export default function Sidebar({
   currentPage,
   onNavigate,
   isMobile = false,
