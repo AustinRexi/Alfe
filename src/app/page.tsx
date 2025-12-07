@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useApp } from "@/provider/AppContext";
 import SplashScreen from "@/app/splashscreen/page";
 import Login from "@/app/login/page";
-import { Layout } from "@/app/layout/page";
+import AppLayout from "@/components/layout/AppLayout";
 
 // Import all pages
 import Dashboard from "@/app/dashboard/page";
@@ -111,7 +111,7 @@ export default function Home() {
   };
 
   return (
-    <Layout
+    <AppLayout
       currentPage={currentPage}
       onNavigate={setCurrentPage}
       onLogout={logout}
@@ -120,6 +120,6 @@ export default function Home() {
       vendorImage={vendorProfile.profileImage || ""}
     >
       {renderPage()}
-    </Layout>
+    </AppLayout>
   );
 }
