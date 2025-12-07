@@ -1,4 +1,4 @@
-// src/providers/AppContext.tsx
+// src/provider/AppContext.tsx
 "use client";
 
 import {
@@ -53,14 +53,13 @@ interface AppContextType {
   logout: () => void;
 }
 
-// Create context with proper type
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Provider component
 export function AppProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<Page>("dashboard");
 
+  // ONLY ONE DECLARATION — THIS IS THE FIX
   const [vendorProfile, setVendorProfile] = useState<VendorProfile>({
     isComplete: false,
     isVerified: false,
@@ -80,18 +79,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     { id: 1, message: "New order received", read: false, time: "5 mins ago" },
     {
       id: 2,
-      message: "Special order awaiting your bid",
+      message: "Special order awaiting bid",
       read: false,
       time: "15 mins ago",
     },
-    {
-      id: 3,
-      message: "Payment ready for withdrawal",
-      read: false,
-      time: "1 hour ago",
-    },
+    { id: 3, message: "Payment ready", read: false, time: "1 hour ago" },
   ]);
 
+  // Load session on mount
   useEffect(() => {
     const session = localStorage.getItem("vendorSession");
     const savedProfile = localStorage.getItem("vendorProfile");
@@ -106,11 +101,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
     }
   }, []);
-
-  const updateProfile = (profile: VendorProfile) => {
-    setVendorProfile(profile);
-    localStorage.setItem("vendorProfile", JSON.stringify(profile));
-  };
 
   const logout = () => {
     setIsAuthenticated(false);
@@ -133,7 +123,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         currentPage,
         setCurrentPage,
         vendorProfile,
-        setVendorProfile: updateProfile,
+        setVendorProfile,
         notifications,
         markAsRead,
         logout,
@@ -144,7 +134,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom hook
 export const useApp = (): AppContextType => {
   const context = useContext(AppContext);
   if (!context) {
