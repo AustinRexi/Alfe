@@ -11,10 +11,12 @@ import {
   HelpCircle,
   Settings as SettingsIcon,
 } from "lucide-react";
+import type { Page } from "@/provider/AppContext";
 
 interface SidebarProps {
-  currentPage: string;
-  onNavigate: (page: string) => void;
+  currentPage: Page; // ← also change string → Page here
+  onNavigate: (page: Page) => void; // ← and here
+  onLogout?: () => void;
   isMobile?: boolean;
   onClose?: () => void;
 }
@@ -36,7 +38,7 @@ export default function Sidebar({
   isMobile = false,
   onClose,
 }: SidebarProps) {
-  const handleClick = (id: string) => {
+  const handleClick = (id: Page) => {
     onNavigate(id);
     if (isMobile && onClose) onClose();
   };

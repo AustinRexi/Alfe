@@ -4,13 +4,15 @@ import { useState } from "react";
 import { Bell, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { Notification } from "@/types/app";
+import type { Page } from "@/provider/AppContext";
 interface NavbarProps {
   vendorName: string;
   vendorImage?: string;
   notifications: Notification[];
-  onNavigate: (page: string) => void;
-  onMobileMenuToggle: () => void;
+  onNavigate: (page: Page) => void; // ← CHANGE string → Page
   mobileMenuOpen: boolean;
+  onMobileMenuToggle: () => void;
+  onLogout: () => void;
 }
 
 export default function Navbar({
