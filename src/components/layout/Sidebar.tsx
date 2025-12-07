@@ -30,7 +30,7 @@ const menuItems = [
   { id: "profile", label: "Profile", icon: User },
   { id: "support", label: "Support", icon: HelpCircle },
   { id: "settings", label: "Settings", icon: SettingsIcon },
-];
+] as const;
 
 export default function Sidebar({
   currentPage,
