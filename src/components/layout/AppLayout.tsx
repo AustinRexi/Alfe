@@ -6,17 +6,19 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { Notification } from "@/types/app";
 
+// Import the EXACT same Page type from your context
+import { type Page } from "@/provider/AppContext";
+
 interface LayoutProps {
   children: React.ReactNode;
-  currentPage: string;
-  onNavigate: (page: string) => void;
+  currentPage: Page; // ← use Page, not string
+  onNavigate: (page: Page) => void; // ← use Page, not string
   onLogout?: () => void;
   notifications: Notification[];
   vendorName: string;
   vendorImage?: string;
 }
 
-// EXPORT AS DEFAULT — THIS IS CRITICAL!
 export default function AppLayout({
   children,
   currentPage,
@@ -42,7 +44,7 @@ export default function AppLayout({
         notifications={notifications}
         onNavigate={onNavigate}
         mobileMenuOpen={mobileMenuOpen}
-        onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
+        onMobileMenuToggle={() => setMobileMenuOpen((prev) => !prev)}
         onLogout={handleLogout}
       />
 
@@ -78,7 +80,7 @@ export default function AppLayout({
           </div>
         )}
 
-        {/* Main Content Area */}
+        {/* Main Content */}
         <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">{children}</div>
         </main>

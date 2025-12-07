@@ -9,7 +9,7 @@ import {
   ReactNode,
 } from "react";
 
-type Page =
+export type Page =
   | "dashboard"
   | "orders"
   | "products"
