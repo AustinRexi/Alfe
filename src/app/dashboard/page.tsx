@@ -278,7 +278,7 @@ export default function Dashboard() {
       {/* Recent Orders & Activity */}
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Recent Orders */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 ">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-2xl font-bold text-slate-900">Recent Orders</h2>
             <button
@@ -288,8 +288,8 @@ export default function Dashboard() {
               View All <ArrowRight size={18} />
             </button>
           </div>
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm ">
+            <div className="overflow-x-auto ">
               <table className="w-full">
                 <thead className="bg-gradient-to-r from-slate-50 to-slate-100">
                   <tr>

@@ -157,7 +157,7 @@ export default function Profile() {
     <div className="max-w-5xl mx-auto space-y-8 pb-12">
       {/* Header */}
       <div className="text-center sm:text-left">
-        <h1 className="text-4xl font-bold text-slate-900">Vendor Profile</h1>
+        <h1 className="text-4xl font-bold text-slate-900"> Profile</h1>
         <p className="text-lg text-slate-600 mt-3">
           {forceComplete
             ? "Complete your profile to start accepting orders and uploading designs"
@@ -166,7 +166,7 @@ export default function Profile() {
       </div>
 
       {/* Success Banner */}
-      {vendorProfile.isComplete && (
+      {/* {vendorProfile.isComplete && (
         <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-2xl p-6 shadow-lg flex items-center gap-5">
           <CheckCircle size={48} className="text-emerald-600" />
           <div>
@@ -175,7 +175,7 @@ export default function Profile() {
             </h3>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Verification Status Card */}
       <div
@@ -321,12 +321,38 @@ export default function Profile() {
                 </label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  pattern="\d{11}"
+                  maxLength={11}
                   value={formData.nin}
-                  onChange={(e) => handleInputChange("nin", e.target.value)}
-                  className="w-full px-5 py-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-900 transition-all"
+                  onChange={(e) => {
+                    const value = e.target.value
+                      .replace(/\D/g, "")
+                      .slice(0, 11); // Only digits, max 11
+                    handleInputChange("nin", value);
+                  }}
+                  className={`w-full px-5 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-900 transition-all ${
+                    formData.nin && formData.nin.length !== 11
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-slate-300"
+                  }`}
                   placeholder="12345678901"
                   required
                 />
+                {formData.nin &&
+                  formData.nin.length > 0 &&
+                  formData.nin.length !== 11 && (
+                    <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                      <AlertCircle size={16} />
+                      NIN must be exactly 11 digits
+                    </p>
+                  )}
+                {formData.nin.length === 11 && (
+                  <p className="mt-2 text-sm text-green-600 flex items-center gap-1">
+                    <CheckCircle size={16} />
+                    Valid NIN
+                  </p>
+                )}
               </div>
 
               <div>
